@@ -1,4 +1,5 @@
 # -*- mode: python ; coding: utf-8 -*-
+import os
 
 a = Analysis(
     ['src/main.py'],
@@ -6,7 +7,8 @@ a = Analysis(
     binaries=[],
     datas=[
         ('src/processor.py', '.'),
-        ('src/ui.py', '.')
+        ('src/ui.py', '.'),
+        ('public/images/icon.ico', 'public/images'),
     ],
     hiddenimports=[],
     hookspath=[],
@@ -26,7 +28,13 @@ exe = EXE(
     a.datas,
     [],
     name='ZenCut',
-    icon='public/icon.png', 
+    icon= os.path.abspath('public/images/icon.ico'),
+    version_info={
+        'version': '1.0',
+        'company_name': 'SyntexError',
+        'file_description': 'ZenCut Application',
+        'legal_copyright': 'Copyright © 2025',
+    },
     debug=False,
     bootloader_ignore_signals=False,
     strip=False,
