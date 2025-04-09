@@ -10,7 +10,7 @@ from processor import remove_image_background
 class BackgroundRemoverApp:
     def __init__(self, root):
         self.root = root
-        self.root.title("Background Remover")
+        self.root.title("ZenCut")
         self.window_width = 800
         self.window_height = 450
         self.root.geometry(f"{self.window_width}x{self.window_height}")
