@@ -38,6 +38,10 @@ class BackgroundRemoverApp:
         self.progress = ttk.Progressbar(self.frame, mode='determinate', length=400, style="TProgressbar")
         self.progress.pack(pady=(30, 10))
 
+        self.folder_path_label = Label(self.frame, text="", font=("Segoe UI", 10),
+                                       bg="#1e1e1e", fg="#cccccc", wraplength=600, justify="center")
+        self.folder_path_label.pack(pady=(0, 20))
+
         self.image_paths = []
         self.selected_folder = ""
 
@@ -79,6 +83,7 @@ class BackgroundRemoverApp:
                 if f.lower().endswith(('.jpg', '.jpeg', '.png', '.bmp', '.webp'))
             ]
             self.label.config(text=f"{len(self.image_paths)} image(s) selected")
+            self.folder_path_label.config(text=f"📁 {self.selected_folder}")
 
     def run_removal(self):
         if not self.image_paths:
