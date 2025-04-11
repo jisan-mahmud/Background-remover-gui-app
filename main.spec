@@ -1,14 +1,17 @@
 # -*- mode: python ; coding: utf-8 -*-
-from PyInstaller.utils.hooks import collect_all
+import os
+from PyInstaller.utils.hooks import collect_data_files
 
 a = Analysis(
     ['src/main.py'],
-    pathex=[],
+    pathex=['src'],
     binaries=[],
     datas=[
         ('src/processor.py', '.'),
         ('src/ui.py', '.'),
-        ('src/assets/*', 'assets')
+        ('src/assets/folder-opened.png', '.'),
+        ('src/assets/folder-path.png', '.'),
+        ('src/assets/icon-magic.png', '.'),
     ],
     hiddenimports=[],
     hookspath=[],
@@ -18,6 +21,7 @@ a = Analysis(
     noarchive=False,
     optimize=0,
 )
+
 pyz = PYZ(a.pure)
 
 exe = EXE(
@@ -27,6 +31,13 @@ exe = EXE(
     a.datas,
     [],
     name='DeepErase',
+    icon= os.path.abspath('public/images/icon.ico'),
+    version_info={
+        'version': '1.0',
+        'company_name': 'SyntexError',
+        'file_description': 'DeepErase Application',
+        'legal_copyright': 'Copyright © 2025',
+    },
     debug=False,
     bootloader_ignore_signals=False,
     strip=False,
@@ -39,11 +50,4 @@ exe = EXE(
     target_arch=None,
     codesign_identity=None,
     entitlements_file=None,
-    icon=['public/images/icon.ico'],
-    version_info={
-        'version': '1.0',
-        'company_name': 'SyntexError',
-        'file_description': 'DeepErase Application',
-        'legal_copyright': 'Copyright © 2025',
-    },
 )
