@@ -2,10 +2,11 @@ import os
 import threading
 import webbrowser
 from tkinter import filedialog, Label, messagebox, ttk
-from PIL import Image
+from PIL import Image, ImageTk
 from rembg import remove
 from processor import remove_image_background
 import platform
+import sys
 
 # Check the operating system
 is_windows = platform.system() == 'Windows'
@@ -32,11 +33,13 @@ class BackgroundRemoverApp:
                            bg="#1e1e1e",
                            fg="white")
         self.label.pack(pady=(0, 30))
-
-        self.select_button = ttk.Button(self.frame, text=f"{'📂' if not is_windows else ''} Select Folder", command=self.select_folder)
+        
+        self.folder_icon = self.image_to_icon('folder-opened.png')
+        self.select_button = ttk.Button(self.frame, image= self.folder_icon, text=" Select Folder", compound="left", command=self.select_folder)
         self.select_button.pack(pady=10)
 
-        self.remove_button = ttk.Button(self.frame, text=f"{'🪄' if not is_windows else ''} Remove Backgrounds", command=self.run_removal)
+        self.remove_icon = self.image_to_icon('icon-magic.png')
+        self.remove_button = ttk.Button(self.frame,image= self.remove_icon, text=" Remove Backgrounds",compound='left', command=self.run_removal)
         self.remove_button.pack(pady=10)
 
         self.progress = ttk.Progressbar(self.frame, mode='determinate', length=400, style="TProgressbar")
@@ -48,9 +51,24 @@ class BackgroundRemoverApp:
 
         self.image_paths = []
         self.selected_folder = ""
+        self.path_folder_icon = self.image_to_icon('folder-path.png')
 
         # Copyright info
         self.add_footer()
+        
+        
+    def image_to_icon(self, image_name):
+        if getattr(sys, 'frozen', False):
+            # If the app is bundled by PyInstaller, use _MEIPASS
+            assets = os.path.join(sys._MEIPASS, 'assets')
+        else:
+            # If the app is in development, use the normal directory
+            assets = os.path.join(os.path.dirname(__file__), 'assets')
+
+        folder_image = Image.open(os.path.join(assets, image_name)) 
+        folder_image = folder_image.resize((20, 20))
+        folder_icon = ImageTk.PhotoImage(folder_image)
+        return folder_icon
 
     def center_window(self):
         screen_width = self.root.winfo_screenwidth()
@@ -80,14 +98,17 @@ class BackgroundRemoverApp:
 
     def select_folder(self):
         folder = filedialog.askdirectory(title="Select Folder")
+        
         if folder:
             self.selected_folder = folder
             self.image_paths = [
                 os.path.join(folder, f) for f in os.listdir(folder)
                 if f.lower().endswith(('.jpg', '.jpeg', '.png', '.bmp', '.webp'))
             ]
+            # Correcting the string formatting in the label configuration
             self.label.config(text=f"{len(self.image_paths)} image(s) selected")
-            self.folder_path_label.config(text=f"{'📂' if not is_windows else ''} {self.selected_folder}")
+            self.folder_path_label.config(image= self.path_folder_icon, text=f"{self.selected_folder}", compound='left')
+
 
     def run_removal(self):
         if not self.image_paths:
