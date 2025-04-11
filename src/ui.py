@@ -5,16 +5,20 @@ from tkinter import filedialog, Label, messagebox, ttk
 from PIL import Image
 from rembg import remove
 from processor import remove_image_background
+import platform
+
+# Check the operating system
+is_windows = platform.system() == 'Windows'
 
 
 class BackgroundRemoverApp:
     def __init__(self, root):
         self.root = root
-        self.root.title("ZenCut")
-        self.window_width = 800
-        self.window_height = 450
+        self.root.title("DeepErase")
+        self.window_width = 900
+        self.window_height = 480
         self.root.geometry(f"{self.window_width}x{self.window_height}")
-        self.root.resizable(False, False)
+        self.root.resizable(True, True)
 
         self.center_window()
         self.setup_style()
@@ -29,10 +33,10 @@ class BackgroundRemoverApp:
                            fg="white")
         self.label.pack(pady=(0, 30))
 
-        self.select_button = ttk.Button(self.frame, text="📂 Select Folder", command=self.select_folder)
+        self.select_button = ttk.Button(self.frame, text=f"{'📂' if not is_windows else ''} Select Folder", command=self.select_folder)
         self.select_button.pack(pady=10)
 
-        self.remove_button = ttk.Button(self.frame, text="🪄 Remove Backgrounds", command=self.run_removal)
+        self.remove_button = ttk.Button(self.frame, text=f"{'🪄' if not is_windows else ''} Remove Backgrounds", command=self.run_removal)
         self.remove_button.pack(pady=10)
 
         self.progress = ttk.Progressbar(self.frame, mode='determinate', length=400, style="TProgressbar")
@@ -83,7 +87,7 @@ class BackgroundRemoverApp:
                 if f.lower().endswith(('.jpg', '.jpeg', '.png', '.bmp', '.webp'))
             ]
             self.label.config(text=f"{len(self.image_paths)} image(s) selected")
-            self.folder_path_label.config(text=f"📁 {self.selected_folder}")
+            self.folder_path_label.config(text=f"{'📂' if not is_windows else ''} {self.selected_folder}")
 
     def run_removal(self):
         if not self.image_paths:
@@ -92,7 +96,7 @@ class BackgroundRemoverApp:
         threading.Thread(target=self.remove_backgrounds).start()
 
     def remove_backgrounds(self):
-        output_folder = os.path.join(self.selected_folder, 'output')
+        output_folder = os.path.join(self.selected_folder, 'PNG Images')
         os.makedirs(output_folder, exist_ok=True)
 
         total = len(self.image_paths)
@@ -108,7 +112,7 @@ class BackgroundRemoverApp:
             self.progress["value"] = i + 1
             self.root.update_idletasks()
 
-        messagebox.showinfo("Done", f"✅ Background removed from {total} image(s).")
+        messagebox.showinfo("Done", f"{'✅' if not is_windows else ''} Background removed from {total} image(s).")
         self.label.config(text="Select a folder to remove image backgrounds")
         self.progress["value"] = 0
 
@@ -133,4 +137,4 @@ class BackgroundRemoverApp:
             cursor="hand2"
         )
         link.place(relx=1.0, rely=1.0, anchor="se", x=-30, y=-10)
-        link.bind("<Button-1>", lambda e: webbrowser.open("https://www.facebook.com/jisanmahmud23/"))
+        link.bind("<Button-1>", lambda e: webbrowser.open("https://github.com/jisan-mahmud"))
