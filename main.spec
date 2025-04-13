@@ -9,9 +9,6 @@ a = Analysis(
     datas=[
         ('src/processor.py', '.'),
         ('src/ui.py', '.'),
-        ('src/assets/folder-opened.png', '.'),
-        ('src/assets/folder-path.png', '.'),
-        ('src/assets/icon-magic.png', '.'),
     ],
     hiddenimports=[],
     hookspath=[],
