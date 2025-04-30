@@ -1,7 +1,3 @@
-Here’s a shorter version of your `README.md`:
-
----
-
 # DeepErase: AI-Powered Background Removal Tool
 
 **DeepErase** is a GUI-based desktop application that uses AI to remove backgrounds from images. Built with Python and the **rembg** library, it supports **batch processing** and outputs high-quality, transparent PNG images.
